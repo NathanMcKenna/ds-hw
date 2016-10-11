@@ -12,9 +12,16 @@ def degrees_of_freedom(s1, s2, n1, n2):
     @param n1 Thu number of observations in the first sample
     @param n2 The number of observations in the second sample
     """
-
-
-    return 0.0
+    
+    numerator = ((s1/n1)+(s2/n2))**2
+    
+    denom1 = (1/(n1-1)) * ((s1/n1)**2)
+    
+    denom2 = (1/(n2-1)) * ((s2/n2)**2)
+    
+    denominator = denom1 + denom2
+    
+    return numerator/denominator
 
 def unbiased_sample_variance(observations, mean):
     """
@@ -24,15 +31,25 @@ def unbiased_sample_variance(observations, mean):
     @param mean The estimated mean
     """
     
-    return 0
+    acc = 0
+    for observation in observations:
+        acc += (observation - mean)**2
+    var = acc/(len(observations) - 1)
+    
+    
+    return var
 
 def t_statistic(mean1, mean2, n1, n2, svar1, svar2):
     """
     Compute the t-statistic for the given estimates
     """
 
-    # Complete this funtion
-    return 0.0
+    numerator = mean1 - mean2
+    
+    denominator = ((svar1/n1)+(svar2/n2))**(1/2)
+    
+    
+    return numerator/denominator
 
 def t_test(sample1, sample2):
     """
@@ -41,10 +58,24 @@ def t_test(sample1, sample2):
     @param sample1 An iterable of the first sample
     @param sample2 An iterable of the second sample
     """
+    
+    n1 = len(sample1)
+    n2 = len(sample2)
+    
+    
+    mean1 = sum(sample1)/n1
+    mean2 = sum(sample2)/n2
+    
+    var1 = unbiased_sample_variance(sample1,mean1)
+    var2 = unbiased_sample_variance(sample2,mean2)
+    
+    dof = degrees_of_freedom(var1, var2, n1, n2)
 
-
-
-    return 0.0
+    tstat = t_statistic(mean1,mean2,n1,n2,var1,var2)
+  
+    pvalue = 2*t.sf(tstat,dof)
+    
+    return pvalue
 
 if __name__ == "__main__":
     v1 = [5, 7, 5, 3, 5, 3, 3, 9]

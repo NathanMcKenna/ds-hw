@@ -94,6 +94,7 @@ class BigramFinder:
         self._vocab = None
 
         # You may want to add additional data structures here.
+        self._bigramCounts = {}
 
         self._unigram = Counter()
 
@@ -165,9 +166,15 @@ class BigramFinder:
         assert self._vocab is not None, "Adding counts before finalizing vocabulary"
         
         # Your code here
-        for ll, rr in bigrams(sentence):
-            None
-            # Your code here
+        for context, word in bigrams(sentence):
+            if(context not in self._bigramCounts):
+                self._bigramCounts[context] = {}
+                self._bigramCounts[context][word] = 1
+            else:
+                if(word not in self._bigramCounts[context]):
+                    self._bigramCounts[context][word] = 1
+                else:
+                    self._bigramCounts[context][word] += 1
 
     def valid_bigrams(self):
         """
